@@ -39,7 +39,6 @@ export class SyncService {
       for (;;) {
         const page = await this.api.getOrdersPage(cursor, PAGE_SIZE);
         stats.pages++;
-        console.log(page , 'page')
         stats.received += page.items.length;
         for (const raw of page.items) {
           try {

@@ -29,4 +29,9 @@ describe("toKop / fromKop", () => {
     expect(fromKop(250000)).toBe(2500);
     expect(fromKop(1099)).toBe(10.99);
   });
+
+  it("не теряет копейку из-за IEEE 754 (2284.99 * 100)", () => {
+    expect(toKop(2284.99)).toBe(228499);
+    expect(toKop(6289.23)).toBe(628923);
+  });
 });

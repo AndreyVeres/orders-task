@@ -4,16 +4,42 @@
 
 /** Сумма из внешнего API: число или строка с числом ("250.10"). */
 export function parseRub(raw: unknown): number {
-  const value = typeof raw === "string" ? Number(raw.trim()) : raw;
+  const value =
+    typeof raw === "string"
+      ? raw.trim() === ""
+        ? NaN
+        : Number(raw.trim())
+      : raw;
+
   if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
     throw new Error(`invalid amount: ${JSON.stringify(raw)}`);
   }
   return value;
 }
 
+export function parsePercent(raw: unknown): number {
+  const value =
+    typeof raw === "string"
+      ? raw.trim() === ""
+        ? NaN
+        : Number(raw.trim())
+      : raw;
+
+  if (
+    typeof value !== "number" ||
+    !Number.isFinite(value) ||
+    value < 0 ||
+    value > 100
+  ) {
+    throw new Error(`invalid discountPercent: ${JSON.stringify(raw)}`);
+  }
+
+  return value;
+}
+
 /** Рубли → копейки. Доли копейки отбрасываются: деньги клиенту не досчитываем. */
 export function toKop(rub: number): number {
-  return Math.floor(rub * 100);
+  return Math.floor(rub * 100 + 1e-6);
 }
 
 /** Копейки → рубли для ответа API. */
